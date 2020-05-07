@@ -1,9 +1,9 @@
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import facede.HelloFacade
-import repositories.{DatabaseProfile, HelloRepo}
-import routes.HelloRoute
-import services.HelloService
+import facede.{HelloFacade, TaskFacade}
+import repositories.{DatabaseProfile, HelloRepo, TaskRepo}
+import routes.{HelloRoute, TaskRoute}
+import services.{HelloService, TaskService}
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
@@ -20,12 +20,19 @@ object MainServer {
 
     val helloRepo = new HelloRepo(db)
     val services = new HelloService(helloRepo)
-    val facade = new HelloFacade(services)
-    val routes = new HelloRoute(facade)
+    val helloFacade = new HelloFacade(services)
+    val helloRoute = new HelloRoute(helloFacade)
+
+    val taskRepo = new TaskRepo(db)
+    val taskService = new TaskService(taskRepo)
+    val taskFacade = new TaskFacade(taskService)
+    val taskRoute = new TaskRoute(taskFacade)
 
     for {
-      _ <- facade.createTable
-      http <- Http().bindAndHandle(routes.route, "0.0.0.0", 8080)
+      _ <- helloFacade.createTable
+      _ <- taskFacade.createTable
+      http <- Http().bindAndHandle(taskRoute.route, "0.0.0.0", 8080)
+//      http <- Http().bindAndHandle(helloRoute.route, "0.0.0.0", 8080)
     } yield http
 
     println(s"service running on 8080")
