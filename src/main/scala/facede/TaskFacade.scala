@@ -14,7 +14,9 @@ class TaskFacade (taskService: TaskService)
   }
 
   def getAll() = {
-    taskService.getAll
+    taskService
+      .getAll
+      .map(_.map(TaskEntity.toTaskMessage(_)))
   }
 
   def insert(taskPostForm: TaskPostForm) = {

@@ -6,7 +6,7 @@ import routes.{HelloRoute, TaskRoute}
 import services.{HelloService, TaskService}
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
-
+import akka.http.scaladsl.server.Directives._
 import scala.concurrent.ExecutionContextExecutor
 
 object MainServer {
@@ -31,8 +31,7 @@ object MainServer {
     for {
       _ <- helloFacade.createTable
       _ <- taskFacade.createTable
-      http <- Http().bindAndHandle(taskRoute.route, "0.0.0.0", 8080)
-//      http <- Http().bindAndHandle(helloRoute.route, "0.0.0.0", 8080)
+      http <- Http().bindAndHandle(taskRoute.route ~ helloRoute.route, "0.0.0.0", 8080)
     } yield http
 
     println(s"service running on 8080")

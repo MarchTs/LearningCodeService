@@ -5,17 +5,17 @@ import entity.TaskEntity
 trait TaskForm
 
 case class TaskPostForm(
-                         name: String,
+                         taskName: String,
                          taskType: String,
-                         description: String)
+                         taskDescription: String)
   extends TaskForm
 
 object TaskForm {
-  def toTaskEntity(taskPostForm: TaskPostForm) = {
+  def toTaskEntity(taskPostForm: TaskPostForm): TaskEntity = {
     TaskEntity(
-      taskName = taskPostForm.name,
+      taskName = taskPostForm.taskName,
       taskType = taskPostForm.taskType,
-      taskDescription = taskPostForm.description
+      taskDescription = taskPostForm.taskDescription
     )
   }
 }

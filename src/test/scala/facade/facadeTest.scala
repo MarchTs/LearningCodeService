@@ -37,7 +37,6 @@ class facadeTest extends AnyFlatSpec
   }
   val bastCaseFacade = new HelloFacade(successfulService)
   val worseCaseFacade = new HelloFacade(networkFail)
-  val routes = new HelloRoute(bastCaseFacade)
 
 
   "insert" should "success" in {
