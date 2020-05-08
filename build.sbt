@@ -1,4 +1,4 @@
-name := "trynewproject"
+name := "LearningCodeService"
 
 version := "0.1"
 

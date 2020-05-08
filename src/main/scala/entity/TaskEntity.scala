@@ -2,13 +2,13 @@ package entity
 
 import message.TaskMessage
 
-case class TaskEntity(taskName: String, taskType: String, taskDescription: String)
+case class TaskEntity(taskName: String, taskType: TaskType, taskDescription: String)
 
 object TaskEntity {
-  def toTaskMessage(taskEntity: TaskEntity): Unit = {
+  def toTaskMessage(taskEntity: TaskEntity): TaskMessage = {
     TaskMessage(
       taskName = taskEntity.taskName,
-      taskType = taskEntity.taskType,
+      taskType = TaskType.toStr(taskEntity.taskType),
       taskDescription = taskEntity.taskDescription)
   }
 }

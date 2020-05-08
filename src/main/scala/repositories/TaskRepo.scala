@@ -1,19 +1,25 @@
 package repositories
 
-import entity.{HelloEntity, TaskEntity}
+import entity.{Pending, TaskEntity, TaskType}
 
 class TaskRepo(val dbProfile: DatabaseProfile) {
 
   import dbProfile.db.profile.api._
 
+  implicit val typeTaskColumnType = MappedColumnType.base[TaskType, String](
+    { `type` => TaskType.toStr(`type`) },
+    { str => TaskType.toTaskType(str).getOrElse(Pending) }
+  )
+
   class TaskTable(tag: Tag) extends Table[TaskEntity](tag, "Task") {
     def taskName = column[String]("name")
 
-    def taskType = column[String]("Type")
+    def taskType = column[TaskType]("Type")
 
     def taskDescription = column[String]("description")
 
-    def * = (taskName, taskType, taskDescription) <> ((TaskEntity.apply _).tupled, TaskEntity.unapply)
+    def * =
+      (taskName, taskType, taskDescription) <> ((TaskEntity.apply _).tupled, TaskEntity.unapply)
   }
 
   val taskTable = TableQuery[TaskTable]
